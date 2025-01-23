@@ -1,16 +1,15 @@
-import CabinCard from "@/app/_components/CabinCard";
+import { Suspense } from "react";
+import CabinsList from "../_components/CabinsList";
+import Spinner from "../_components/Spinner";
 
-import { getCabins } from "@/app/_lib/data-service";
-
+// export const revalidate = 15; // this value should not be computed from another value.
 export const metadata = {
   title: "Cabins",
 };
 
-async function Page() {
-  const cabins = await getCabins();
-  console.log(cabins);
+function Page() {
   return (
-    <div>
+    <>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
         Our Luxury Cabins
       </h1>
@@ -23,14 +22,11 @@ async function Page() {
         Welcome to paradise.
       </p>
 
-      {cabins.length > 0 && (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 xl:gap-14">
-          {cabins.map((cabin) => (
-            <CabinCard cabin={cabin} key={cabin.id} />
-          ))}
-        </div>
-      )}
-    </div>
+      <Suspense fallback={<Spinner />}>
+        <CabinsList />
+      </Suspense>
+      {/* <CabinsList /> */}
+    </>
   );
 }
 
