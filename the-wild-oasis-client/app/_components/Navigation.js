@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { auth } from "@/app/_lib/auth";
+import Image from "next/image";
 
-export default function Navigation() {
+export default async function Navigation() {
+  const session = await auth();
+
+  console.log(session);
   return (
     <nav className="z-10 text-xl">
       <ul className="flex gap-16 items-center">
@@ -27,6 +32,17 @@ export default function Navigation() {
           >
             Guest area
           </Link>
+        </li>
+        <li>
+          {session?.user?.image ? (
+            <Link href="/account">
+              <img
+                className="h-8 rounded-full"
+                src={session.user.image}
+                alt={`${session.user.name}'s Image`}
+              />
+            </Link>
+          ) : null}
         </li>
       </ul>
     </nav>
